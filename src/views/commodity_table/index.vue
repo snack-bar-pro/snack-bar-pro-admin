@@ -28,6 +28,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="total, prev, pager, next"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -36,6 +46,9 @@
 export default {
   data() {
     return {
+      currentPage: 1,
+      total: 10,
+      pageSize: 10,
       list: [{
         id: 0,
         price: 100,
@@ -62,6 +75,12 @@ export default {
       setTimeout(() => {
         this.listLoading = false
       }, 1000)
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
     }
   }
 }
