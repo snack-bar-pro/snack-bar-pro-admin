@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form label-position="left" ref="form" :model="form" label-width="150px">
-      <el-form-item label="Commodity Name">
-        <el-input prefix-icon="el-icon-fork-spoon" v-model="form.commodityName" style="width: 300px"/>
+      <el-form-item label="Commodity Title">
+        <el-input prefix-icon="el-icon-fork-spoon" v-model="form.title" style="width: 300px"/>
       </el-form-item>
       <el-form-item label="Commodity Price">
         <el-input prefix-icon="el-icon-coin" @keyup.native="inputPrice" v-model="form.price" style="width: 150px"/>
@@ -38,7 +38,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       form: {
-        name: '',
+        title: '',
         desc: '',
         price: null,
         thumb: ''
