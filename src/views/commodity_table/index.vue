@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column label="Image" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.thumb"  width="70" height="70" />
+          <img :src="scope.row.thumb" width="70" height="70">
         </template>
       </el-table-column>
     </el-table>
@@ -42,8 +42,10 @@
 </template>
 
 <script>
+import { getAllCommodity } from '@/api/commodity'
 
 export default {
+
   data() {
     return {
       currentPage: 1,
@@ -69,12 +71,13 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData() {
+    async fetchData() {
       this.listLoading = true
       // getAllCommodity().then((res) => {})
-      setTimeout(() => {
-        this.listLoading = false
-      }, 1000)
+      // console.log('search commodity')
+      const result = await getAllCommodity(0, 10)
+      this.list = await result.data
+      this.listLoading = false
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
