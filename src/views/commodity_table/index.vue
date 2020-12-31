@@ -1,5 +1,11 @@
 <template>
   <div class="app-container">
+    <el-button
+      size="mini"
+      type="primary"
+      style="float: right; margin-right: 25px;"
+      @click="handleCreate()"
+    >Create</el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -17,9 +23,14 @@
           {{ scope.row.desc }}
         </template>
       </el-table-column>
-      <el-table-column width="110" label="Price">
+      <el-table-column width="220" label="Price">
         <template slot-scope="scope">
           {{ scope.row.price }}
+        </template>
+      </el-table-column>
+      <el-table-column width="220" label="Category">
+        <template slot-scope="scope">
+          {{ scope.row.category }}
         </template>
       </el-table-column>
       <el-table-column label="Image" align="center">
@@ -27,22 +38,35 @@
           <img :src="scope.row.thumb" width="70" height="70">
         </template>
       </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)"
+          >Edit</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >Delete</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
         :page-size="pageSize"
         layout="total, prev, pager, next"
-        :total="total">
-      </el-pagination>
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getAllCommodity } from '@/api/commodity'
+import { getAllCommodity, delCommodity } from '@/api/commodity'
 
 export default {
 
@@ -73,8 +97,6 @@ export default {
   methods: {
     async fetchData() {
       this.listLoading = true
-      // getAllCommodity().then((res) => {})
-      // console.log('search commodity')
       const result = await getAllCommodity(0, 10)
       this.list = await result.data
       this.listLoading = false
@@ -84,6 +106,27 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+    },
+    handleEdit(index, row) {
+      this.$router.push({ name: 'Form',
+        params: {
+          id: row._id,
+          title: row.title,
+          desc: row.desc,
+          price: row.price,
+          thumb: row.thumb,
+          category: row.category,
+          action: 'Update'
+        }
+      })
+    },
+    handleDelete(index, row) {
+      const commodityId = row._id
+      delCommodity(commodityId)
+      getAllCommodity()
+    },
+    handleCreate() {
+      this.$router.push({ name: 'Form' })
     }
   }
 }

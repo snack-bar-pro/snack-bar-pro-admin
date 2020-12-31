@@ -1,14 +1,21 @@
 <template>
   <div class="app-container">
-    <el-form label-position="left" ref="form" :model="form" label-width="150px">
+    <el-form ref="form" label-position="left" :model="form" label-width="150px">
       <el-form-item label="Commodity Title">
-        <el-input prefix-icon="el-icon-fork-spoon" v-model="form.title" style="width: 300px"/>
+        <el-input v-model="form.title" prefix-icon="el-icon-fork-spoon" style="width: 300px" />
       </el-form-item>
       <el-form-item label="Commodity Price">
-        <el-input prefix-icon="el-icon-coin" @keyup.native="inputPrice" v-model="form.price" style="width: 150px"/>
+        <el-input v-model="form.price" prefix-icon="el-icon-coin" style="width: 150px" @keyup.native="inputPrice" />
       </el-form-item>
       <el-form-item label="Description">
-        <el-input v-model="form.desc" type="textarea" :autosize="{ minRows: 3, maxRows: 6}" style="width: 600px"/>
+        <el-input v-model="form.desc" type="textarea" :autosize="{ minRows: 3, maxRows: 6}" style="width: 600px" />
+      </el-form-item>
+      <el-form-item label="Category">
+        <el-select v-model="form.category" placeholder="please choose category!">
+          <el-option label="Drinks" value="drinks" />
+          <el-option label="Snacks" value="snacks" />
+          <el-option label="Daily" value="Daily" />
+        </el-select>
       </el-form-item>
       <el-form-item label="Image">
         <el-upload
@@ -19,12 +26,13 @@
           accept="image/*"
           auto-upload="false"
           :on-remove="handleRemove"
-          :on-success="handleUpSuccess">
-          <i class="el-icon-plus"></i>
+          :on-success="handleUpSuccess"
+        >
+          <i class="el-icon-plus" />
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
+        <el-button type="primary" @click="onSubmit">{{ action }}</el-button>
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
@@ -32,16 +40,20 @@
 </template>
 
 <script>
+import { saveCommodity, updateCommodity } from '../../api/commodity'
 export default {
   data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
+      action: 'Create',
       form: {
+        id: '',
         title: '',
         desc: '',
         price: null,
-        thumb: ''
+        thumb: '',
+        category: ''
       }
     }
   },
@@ -51,8 +63,26 @@ export default {
       return this.form.icon_url ? [{ url: this.form.icon_url }] : []
     }
   },
+  created() {
+    if (this.$route && Object.keys(this.$route.params).length > 0) {
+      this.fetchData(this.$route.params)
+    }
+  },
   methods: {
     onSubmit() {
+      const commodity = {
+        title: this.form.title,
+        desc: this.form.desc,
+        price: this.form.price,
+        thumb: this.form.thumb,
+        category: this.form.category
+      }
+      if (this.action === 'Create') {
+        saveCommodity(commodity)
+      } else {
+        commodity._id = this.form.id
+        updateCommodity(commodity)
+      }
       this.$message('submit!')
     },
     onCancel() {
@@ -73,14 +103,25 @@ export default {
       this.form.price = this.form.price.replace(/\.{2,}/g, '.')
       this.form.price = this.form.price.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
       this.form.price = this.form.price.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+    },
+    async fetchData(params) {
+      this.form.id = params.id
+      this.form.thumb = params.thumb
+      this.form.title = params.title
+      this.form.price = params.price
+      this.form.desc = params.desc
+      this.form.category = params.category
+      if (this.action !== '') {
+        this.action = params.action
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.line{
-  text-align: center;
-}
+  .line{
+    text-align: center;
+  }
 </style>
 
