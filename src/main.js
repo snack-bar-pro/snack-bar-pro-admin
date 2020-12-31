@@ -11,9 +11,10 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
+import echarts from 'echarts';
 import '@/icons' // icon
 import '@/permission' // permission control
+Vue.prototype.$echarts = echarts;
 
 /**
  * If you don't want to use mock-server
@@ -33,8 +34,7 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
-Vue.config.productionTip = false
-
+Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
