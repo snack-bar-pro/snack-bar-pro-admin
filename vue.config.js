@@ -45,7 +45,7 @@ module.exports = {
         onProxyReq: function(proxyReq, req, res, options) {
           if (req.body) {
             const bodyData = JSON.stringify(req.body)
-            proxyReq.setHeader('Content-Type', ['application/json', 'image/jpeg'])
+            proxyReq.setHeader('Content-Type', 'application/json')
             proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
             // stream the content
             proxyReq.write(bodyData)

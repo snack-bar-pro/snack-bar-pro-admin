@@ -19,16 +19,11 @@
       </el-form-item>
       <el-form-item label="Image">
         <el-upload
-          action=""
-          :file-list="fileArr"
-          list-type="picture-card"
-          :limit="1"
-          accept="image/*"
-          auto-upload="false"
-          :on-remove="handleRemove"
-          :on-success="handleUpSuccess"
-        >
-          <i class="el-icon-plus" />
+          class="upload-demo"
+          action="/api/commodity/image"
+          list-type="picture">
+          <el-button size="small" type="primary">Upload Image</el-button>
+          <div slot="tip" class="el-upload__tip">Only jpg/png files can be uploaded and not exceed 500kb</div>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -55,12 +50,6 @@ export default {
         thumb: '',
         category: ''
       }
-    }
-  },
-  computed: {
-    fileArr() {
-      // 上传图片 显示默认图片
-      return this.form.icon_url ? [{ url: this.form.icon_url }] : []
     }
   },
   created() {
@@ -90,12 +79,6 @@ export default {
         message: 'cancel!',
         type: 'warning'
       })
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handleUpSuccess(response, file, fileList) {
-      console.log(response, file, fileList)
     },
     inputPrice() {
       this.form.price = this.form.price.replace(/[^\d.]/g, '')
