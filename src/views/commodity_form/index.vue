@@ -14,7 +14,7 @@
         <el-select v-model="form.category" placeholder="please choose category!">
           <el-option label="Drinks" value="drinks" />
           <el-option label="Snacks" value="snacks" />
-          <el-option label="Daily" value="Daily" />
+          <el-option label="Daily" value="daily" />
         </el-select>
       </el-form-item>
       <el-form-item label="Image">
