@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      total: 10,
+      total: 0,
       pageSize: 10,
       list: [{
         id: 0,
@@ -100,6 +100,7 @@ export default {
       this.listLoading = true
       const result = await getAllCommodity(0, 10)
       this.list = await result.data
+      this.total = this.list.length
       for (const listKey in this.list) {
         this.list[listKey].thumb = baseUrl + this.list[listKey].thumb
       }
