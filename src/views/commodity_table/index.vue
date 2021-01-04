@@ -67,6 +67,7 @@
 
 <script>
 import { getAllCommodity, delCommodity } from '@/api/commodity'
+import { baseUrl } from '@/utils/constant'
 
 export default {
 
@@ -99,6 +100,9 @@ export default {
       this.listLoading = true
       const result = await getAllCommodity(0, 10)
       this.list = await result.data
+      for (const listKey in this.list) {
+        this.list[listKey].thumb = baseUrl + this.list[listKey].thumb
+      }
       this.listLoading = false
     },
     handleSizeChange(val) {
@@ -123,7 +127,7 @@ export default {
     handleDelete(index, row) {
       const commodityId = row._id
       delCommodity(commodityId)
-      getAllCommodity()
+      this.fetchData()
     },
     handleCreate() {
       this.$router.push({ name: 'Form' })
