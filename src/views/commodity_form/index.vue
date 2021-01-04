@@ -21,7 +21,8 @@
         <el-upload
           class="upload-demo"
           action="/api/commodity/image"
-          list-type="picture">
+          list-type="picture"
+          :on-success="handleUpSuccess">
           <el-button size="small" type="primary">Upload Image</el-button>
           <div slot="tip" class="el-upload__tip">Only jpg/png files can be uploaded and not exceed 500kb</div>
         </el-upload>
@@ -79,6 +80,9 @@ export default {
         message: 'cancel!',
         type: 'warning'
       })
+    },
+    handleUpSuccess(response, file, fileList) {
+      this.form.thumb = '/static/image/shopItemImage/' + file.name
     },
     inputPrice() {
       this.form.price = this.form.price.replace(/[^\d.]/g, '')
